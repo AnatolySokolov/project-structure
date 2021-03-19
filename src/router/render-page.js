@@ -4,10 +4,11 @@ export default async function(path, match) {
   main.classList.add('is-loading');
 
   const { default: Page } = await import(/* webpackChunkName: "[request]" */`../pages/${path}/index.js`);
-  const productId = match[1];
   let page;
 
-  if (productId) {
+  if (match) {
+    const productId = match[1];
+
     page = new Page(productId);
   } else {
     page = new Page();
