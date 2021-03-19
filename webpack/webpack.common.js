@@ -66,7 +66,8 @@ module.exports = {
       },
       {
         from: path.join(__dirname, '../src/components/product-form/*.svg'),
-        flatten: true
+        flatten: true,
+        to: 'assets/icons/[name].[ext]'
       }
     ])
   ]
