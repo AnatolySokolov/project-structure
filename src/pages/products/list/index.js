@@ -73,8 +73,6 @@ export default class Page {
   }
 
   renderComponents() {
-  	console.log(this.subElements);
-
   	for (const [key, component] of Object.entries(this.components)) {
   		const container = this.subElements[key];
 

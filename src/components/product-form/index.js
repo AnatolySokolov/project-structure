@@ -38,7 +38,7 @@ export default class ProductForm {
 
           <div class="form-group form-group__half_left">
             <label class="form-label">Категория</label>
-            <select data-form="subcategory" class="form-control" name="subcategory">
+            <select id="subcategory" data-form="subcategory" class="form-control" name="subcategory">
               <option value="">Категория &gt; Подкатегория</option>
             </select>
           </div>
@@ -105,12 +105,12 @@ export default class ProductForm {
         <input type="hidden" name="url" value="${image.url}">
         <input type="hidden" name="source" value="${image.source}">
         <span>
-          <img src="icon-grab.svg" data-grab-handle="" alt="grab">
+          <img src="/assets/icons/icon-grab.svg" data-grab-handle="" alt="grab">
           <img class="sortable-table__cell-img" alt="Image" src="${escapeHtml(image.url)}">
           <span>${escapeHtml(image.source)}</span>
         </span>
         <button type="button">
-          <img src="icon-trash.svg" data-delete-handle="" alt="delete">
+          <img src="/assets/icons/icon-trash.svg" data-delete-handle="" alt="delete">
         </button>
       </li>
     `;
@@ -144,7 +144,9 @@ export default class ProductForm {
   }
 
   async render () {
-    const categories = fetchJson(`${process.env.BACKEND_URL}/api/rest/categories?_sort=weight&_refs=subcategory`);
+    if (!this.productId) return this.element;
+
+    const categories = fetchJson(`${process.env.BACKEND_URL}api/rest/categories?_sort=weight&_refs=subcategory`);
     const product = this.loadProductById(this.productId);
     const [categoriesResponse, productResponse] = await Promise.all([categories, product]);
 
@@ -154,7 +156,11 @@ export default class ProductForm {
       this.subElements.productForm.subcategory.innerHTML = options;
     }
 
-    if (productResponse) this.update(...productResponse);
+    if (productResponse) {
+      this.update(...productResponse);
+
+      return this.element;
+    }
   }
 
   async loadProductById(id) {
@@ -165,8 +171,9 @@ export default class ProductForm {
 
   setCategory(category) {
     const select = this.subElements.productForm.subcategory;
+    const selectedOption = Array.from(select.options).find(option => option.value === category);
 
-    Array.from(select.options).find(option => option.value === category).selected = true;
+    if (selectedOption) selectedOption.selected = true;
   }
 
   update(product = {}) {
