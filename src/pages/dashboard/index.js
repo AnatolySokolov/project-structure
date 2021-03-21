@@ -118,7 +118,6 @@ export default class Page {
 
     const data = await fetchJson(url);
 
-    this.components.sortableTable.addRows(data);
     this.components.sortableTable.update(data);
     this.components.ordersChart.update(from, to);
     this.components.salesChart.update(from, to);
