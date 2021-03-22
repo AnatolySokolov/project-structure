@@ -1,5 +1,4 @@
 import ProductForm from '../../../components/product-form';
-import SortableList from '../../../components/sortable-list';
 import escapeHtml from '../../../utils/escape-html.js';
 import fetchJson from '../../../utils/fetch-json.js';
 
@@ -60,7 +59,6 @@ export default class Page {
 
   async renderComponents() {
   	const form = await this.components.productForm.render();
-  	// const form = await this.components.productForm.element;
   	const container = this.subElements.productForm;
 
   	container.append(form);

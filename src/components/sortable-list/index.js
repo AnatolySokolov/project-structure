@@ -25,7 +25,7 @@ export default class SortableList {
     this.dragStop();
   }
 
-  constructor({ items = [] } = {}) {
+  constructor(items = []) {
     this.items = items;
 
     this.render();

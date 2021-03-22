@@ -101,7 +101,7 @@ export default class ProductForm {
     const wrapper = document.createElement('div');
 
     wrapper.innerHTML = `
-      <li class="products-edit__imagelist-item sortable-list__item" style="">
+      <li class="products-edit__imagelist-item" style="">
         <input type="hidden" name="url" value="${image.url}">
         <input type="hidden" name="source" value="${image.source}">
         <span>
@@ -120,7 +120,7 @@ export default class ProductForm {
 
   renderImages(images) {
     const items = images.map(image => this.getImageElement(image));
-    const sortableList = new SortableList({ items });
+    const sortableList = new SortableList(items);
 
     this.subElements.imageListContainer.append(sortableList.element);
   }
