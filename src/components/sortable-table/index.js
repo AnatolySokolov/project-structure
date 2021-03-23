@@ -120,9 +120,20 @@ export default class SortableTable {
 
   getCellTemplate(item) {
     return this.header
-      .map(({id, template}) =>
-        template ? template(item[id]) : `<div class="sortable-table__cell">${ item[id] }</div>`)
-      .join('');
+      .map(({id, template}) => {
+        if (id === 'images' && !item[id].length) {          
+          return `
+            <div class="sortable-table__cell">
+              <img class="sortable-table-image" alt="no-image" src="#">
+            </div>
+          `;
+        } else if (template) {
+          return template(item[id]);
+        } else {
+          return `<div class="sortable-table__cell">${item[id]}</div>`;
+        }     
+      })
+      .join('');        
   }
 
   async render(){
