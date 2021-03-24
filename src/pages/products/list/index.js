@@ -1,9 +1,21 @@
 import SortableTable from '../../../components/sortable-table';
+import DoubleSlider from '../../../components/double-slider';
 import header from './products-header.js';
+import fetchJson from '../../../utils/fetch-json.js';
 
 export default class Page {
 	element;
 	subElements = {};
+
+  onInput = event => {
+    const key = event.target.dataset.element;
+    const value = event.target.value;
+    const queryParams = {
+      [key]: value
+    };
+
+    this.updateComponents(queryParams);
+  }
 
 	get template() {
 		return `
@@ -20,7 +32,9 @@ export default class Page {
             	<input type="text" data-element="filterName" class="form-control" placeholder="Название товара">
 						</div>
 
-						<div data-element="doubleSlider" class="form-group"></div>
+						<div data-element="doubleSlider" class="form-group">
+              <label class="form-label">Цена:</label>
+            </div>
 
 						<div class="form-group">
             	<label class="form-label">Статус:</label>
@@ -47,6 +61,7 @@ export default class Page {
 
 		this.initComponents();
 		this.renderComponents();
+    this.initEventListeners();
 
 		return this.element;
 	}
@@ -67,8 +82,11 @@ export default class Page {
   		{ url: 'api/rest/products' }  		
   	);
 
+    const doubleSlider = new DoubleSlider({min: 0, max: 4000});
+
   	this.components = {
-  		sortableTable
+  		sortableTable,
+      doubleSlider
   	}
   }
 
@@ -78,6 +96,36 @@ export default class Page {
 
   		container.append(component.element);
   	}
+  }
+
+  initEventListeners() {
+    this.subElements.doubleSlider.addEventListener('range-select', event => this.updateComponents(event.detail));
+    this.subElements.filterName.addEventListener('input', this.onInput);
+    this.subElements.filterStatus.addEventListener('input', this.onInput);
+  }
+
+  async updateComponents(queryParams = {}) {
+    const queryMap = {
+      filterName: 'title_like',
+      filterStatus: 'status',
+      from: 'price_gte',
+      to: 'price_lte',
+    }
+
+    const getQuery = (queryParams = {}) => {
+      const url = this.components.sortableTable.url;
+
+      for (const key of Object.keys(queryParams)) {
+        url.searchParams.set(queryMap[key], queryParams[key]);
+      }
+
+      return url;
+    }
+
+    const query = getQuery(queryParams);
+    const data = await fetchJson(query);
+
+    this.components.sortableTable.update(data);
   }
 
   remove() {
