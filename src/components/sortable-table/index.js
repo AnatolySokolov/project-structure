@@ -80,12 +80,12 @@ export default class SortableTable {
           ${this.getBodyTemplate(this.data)}
         </div>
 
-        <div data-elem="loading" class="loading-line sortable-table__loading-line"></div>
+        <div data-element="loading" class="loading-line sortable-table__loading-line"></div>
 
-        <div data-elem="emptyPlaceholder" class="sortable-table__empty-placeholder">
+        <div data-element="emptyPlaceholder" class="sortable-table__empty-placeholder">
           <div>
             <p>Не найдено товаров удовлетворяющих выбранному критерию</p>
-            <button type="button" class="button-primary-outline">Очистить фильтры</button>
+            <button data-element="reset" type="button" class="button-primary-outline">Очистить фильтры</button>
           </div>
         </div>
 

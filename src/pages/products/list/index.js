@@ -6,15 +6,14 @@ import fetchJson from '../../../utils/fetch-json.js';
 export default class Page {
 	element;
 	subElements = {};
+  components = {};
 
-  onInput = event => {
-    const key = event.target.dataset.element;
-    const value = event.target.value;
-    const queryParams = {
-      [key]: value
-    };
+  onResetPointerdown = () => {
+    this.subElements.filterName.value = "";
+    this.subElements.filterStatus.value = "";
+    // TODO: create reset implementation for doubleSlider;
 
-    this.updateComponents(queryParams);
+    this.updateComponents();
   }
 
 	get template() {
@@ -99,31 +98,42 @@ export default class Page {
   }
 
   initEventListeners() {
-    this.subElements.doubleSlider.addEventListener('range-select', event => this.updateComponents(event.detail));
-    this.subElements.filterName.addEventListener('input', this.onInput);
-    this.subElements.filterStatus.addEventListener('input', this.onInput);
+    this.components.sortableTable.subElements.reset.addEventListener('pointerdown', this.onResetPointerdown);
+    this.subElements.doubleSlider.addEventListener('range-select', this.updateComponents);
+    this.subElements.filterName.addEventListener('input', this.updateComponents);
+    this.subElements.filterStatus.addEventListener('input', this.updateComponents);
   }
 
-  async updateComponents(queryParams = {}) {
+  get params() {
+    const sliderParams = this.components.doubleSlider.getValue();
+
+    return {
+      filterName: this.subElements.filterName.value,
+      filterStatus: this.subElements.filterStatus.value,
+      from: sliderParams.from,
+      to: sliderParams.to,
+    }
+  }
+
+  get query() {
+    const url = new URL(this.components.sortableTable.url);
+    const params = this.params;    
     const queryMap = {
       filterName: 'title_like',
       filterStatus: 'status',
       from: 'price_gte',
       to: 'price_lte',
+    };
+
+    for (const key of Object.keys(params)) {
+      url.searchParams.set(queryMap[key], params[key]);
     }
 
-    const getQuery = (queryParams = {}) => {
-      const url = new URL(this.components.sortableTable.url);
+    return url;
+  }
 
-      for (const key of Object.keys(queryParams)) {
-        url.searchParams.set(queryMap[key], queryParams[key]);
-      }
-
-      return url;
-    }
-
-    const query = getQuery(queryParams);
-    const data = await fetchJson(query);
+  updateComponents = async() => {
+    const data = await fetchJson(this.query);
 
     this.components.sortableTable.update(data);
   }
@@ -133,10 +143,10 @@ export default class Page {
   }
 
   destroy() {
-  	this.remove();
-
   	for (const component of Object.values(this.components)) {
   		component.destroy();
   	}
+
+    this.remove();
   }
 }
