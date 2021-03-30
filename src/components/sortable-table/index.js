@@ -70,15 +70,25 @@ export default class SortableTable {
 
   get template() {
     return `
-      <div data-element="productsContainer" class="products-list__container">
-        <div class="sortable-table">
-          <div data-element="header" class="sortable-table__header sortable-table__row">
-            ${this.getHeaderTemplate()}
-          </div>
-          <div data-element="body" class="sortable-table__body">
-            ${this.getBodyTemplate(this.data)}
-          </div>          
+      <div class="sortable-table">
+
+        <div data-element="header" class="sortable-table__header sortable-table__row">
+          ${this.getHeaderTemplate()}
         </div>
+
+        <div data-element="body" class="sortable-table__body">
+          ${this.getBodyTemplate(this.data)}
+        </div>
+
+        <div data-elem="loading" class="loading-line sortable-table__loading-line"></div>
+
+        <div data-elem="emptyPlaceholder" class="sortable-table__empty-placeholder">
+          <div>
+            <p>Не найдено товаров удовлетворяющих выбранному критерию</p>
+            <button type="button" class="button-primary-outline">Очистить фильтры</button>
+          </div>
+        </div>
+
       </div>
     `;
   }
