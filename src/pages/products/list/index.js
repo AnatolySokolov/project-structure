@@ -113,7 +113,7 @@ export default class Page {
     }
 
     const getQuery = (queryParams = {}) => {
-      const url = this.components.sortableTable.url;
+      const url = new URL(this.components.sortableTable.url);
 
       for (const key of Object.keys(queryParams)) {
         url.searchParams.set(queryMap[key], queryParams[key]);
