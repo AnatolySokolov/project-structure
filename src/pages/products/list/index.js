@@ -104,14 +104,22 @@ export default class Page {
   }
 
   get params() {
-    const sliderParams = this.components.doubleSlider.getValue();
+    const filterName = this.subElements.filterName.value;
+    const filterStatus = this.subElements.filterStatus.value;
+    const params = {
+      from: this.components.doubleSlider.getValue().from,
+      to: this.components.doubleSlider.getValue().to
+    };
 
-    return {
-      filterName: this.subElements.filterName.value,
-      filterStatus: this.subElements.filterStatus.value,
-      from: sliderParams.from,
-      to: sliderParams.to,
+    if (filterName) {
+      params.filterName = filterName;
     }
+
+    if (filterStatus.length) {
+      params.filterStatus = filterStatus;
+    }
+
+    return params;
   }
 
   get query() {
