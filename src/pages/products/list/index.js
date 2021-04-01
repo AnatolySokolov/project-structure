@@ -11,8 +11,7 @@ export default class Page {
   onResetPointerdown = () => {
     this.subElements.filterName.value = "";
     this.subElements.filterStatus.value = "";
-    // TODO: create reset implementation for doubleSlider;
-
+    this.components.doubleSlider.reset();
     this.updateComponents();
   }
 
@@ -78,7 +77,7 @@ export default class Page {
   initComponents() {
   	const sortableTable = new SortableTable(
   		header,
-  		{ url: 'api/rest/products' }  		
+  		{ url: 'api/rest/products' }
   	);
 
     const doubleSlider = new DoubleSlider({min: 0, max: 4000});
