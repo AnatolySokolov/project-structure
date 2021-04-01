@@ -77,7 +77,7 @@ export default class Page {
   initComponents() {
   	const sortableTable = new SortableTable(
   		header,
-  		{ url: 'api/rest/products' }
+  		{ url: 'api/rest/products?_embed=subcategory.category' }
   	);
 
     const doubleSlider = new DoubleSlider({min: 0, max: 4000});
