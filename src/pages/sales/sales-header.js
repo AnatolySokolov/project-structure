@@ -40,13 +40,8 @@ const header = [
     id: 'delivery',
     title: 'Status',
     sortable: true,
-    sortType: 'number',
-    template: data => {
-      return `<div class="sortable-table__cell">
-          ${data > 0 ? 'Active' : 'Inactive'}
-        </div>`;
-    }
-  },
+    sortType: 'number'
+  }
 ];
 
 export default header;
