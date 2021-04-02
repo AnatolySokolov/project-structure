@@ -164,9 +164,11 @@ export default class ProductForm {
   }
 
   async loadProductById(id) {
-    this.url.searchParams.set('id', id);
+    const url = new URL (this.url);
 
-    return await fetchJson(this.url);
+    url.searchParams.set('id', id);
+
+    return await fetchJson(url);
   }
 
   setCategory(category) {
@@ -225,8 +227,15 @@ export default class ProductForm {
   getFormElementsData() {
     const data ={};
     const elements = this.element.querySelectorAll('[data-form]');
+    const toNumber = ['price', 'quantity', 'discount', 'status'];
 
-    [...elements].forEach(element => data[element.name] = element.value);
+    [...elements].forEach(element => {
+      if (toNumber.includes(element.name)) {
+        data[element.name] = Number(element.value);
+      } else {
+        data[element.name] = element.value;
+      }
+    });
 
     const urls = this.element.querySelectorAll('[name="url"]');
     const sources = this.element.querySelectorAll('[name="source"]');
@@ -248,18 +257,19 @@ export default class ProductForm {
     event.preventDefault();
 
     const response = await fetchJson(this.url, {
-      method: this.productId ? 'PATCH' : 'POST',
+      method: this.productId ? 'PATCH' : 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json;charset=utf-8'
       },
       body: JSON.stringify(this.getFormElementsData()),
     });
 
-    const customEvent = this.productId
-      ? new CustomEvent('product-updated', { detail: this.productId })
-      : new CustomEvent('product-saved', { detail: response.id });
+    const customEventName = this.productId ? 'product-updated' : 'product-saved';
 
-    this.element.dispatchEvent(customEvent);
+    this.element.dispatchEvent(new CustomEvent(customEventName, {
+      bubbles: true,
+      detail: event
+    }));
   }
 
   addListeners() {
