@@ -4,6 +4,7 @@ import ColumnChart from '../../components/column-chart/index.js';
 import header from './bestsellers-header.js';
 
 import fetchJson from '../../utils/fetch-json.js';
+import getFormattedNumber from '../../utils/getFormattedNumber.js';
 
 export default class Page {
   element;
@@ -70,24 +71,11 @@ export default class Page {
       link:'#'
     });
 
-    function getFormatHeading(number, divider) {
-      const arr = String(number).split('');      
-
-      if (arr.length > 3 && arr.length < 6) {
-        arr.splice(-3, 0, divider);
-      } else if (arr.length > 6) {
-        arr.splice(-3, 0, divider);
-        arr.splice(-7, 0, divider);
-      }
-
-      return `$${arr.join('')}`;
-    }
-
     const salesChart = new ColumnChart({
       url: 'api/dashboard/sales',
       range: dateRange,
       label: 'sales',
-      formatHeading: data => getFormatHeading(data, ',')
+      formatHeading: data => `$${getFormattedNumber(data, ',')}`
     });
 
     const customersChart = new ColumnChart({

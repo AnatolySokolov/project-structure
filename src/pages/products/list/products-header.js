@@ -1,3 +1,5 @@
+import getFormattedNumber from '../../../utils/getFormattedNumber.js';
+
 const header = [
   {
     id: 'images',
@@ -34,7 +36,7 @@ const header = [
     title: 'Price',
     sortable: true,
     sortType: 'number',
-    template: price => `<div class="sortable-table__cell">$${price}</div>`
+    template: price => `<div class="sortable-table__cell">$${getFormattedNumber(price, ',')}</div>`
   },
   {
     id: 'status',
