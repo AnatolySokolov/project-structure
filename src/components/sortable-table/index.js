@@ -4,9 +4,8 @@ export default class SortableTable {
   element;
   subElements = {};
   data = [];
-  queryParams = {
-    _order: 'asc'
-  };
+  sortParams = {};
+  filterParams = {};
   isSortLocally = false;
   isRequestSend = false;
 
@@ -24,15 +23,13 @@ export default class SortableTable {
     columnHeader.dataset.order = orderToggle[order];
     columnHeader.append(this.subElements.arrow);
 
-    this.queryParams._sort = id;
-    this.queryParams._order = orderToggle[order];
-    this.queryParams._start = 0;
-    this.queryParams._end = 20;    
+    this.sortParams._sort = id;
+    this.sortParams._order = orderToggle[order];   
 
     if (this.isSortLocally) {
-      this.sort(this.queryParams._sort, this.queryParams._order);
+      this.sort(this.sortParams._sort, this.sortParams._order);
     } else {
-      this.sortOnServer(this.queryParams);
+      this.sortOnServer();
     }
   }
 
@@ -45,23 +42,24 @@ export default class SortableTable {
 
     if (bottom < htmlHeight + gap) {
       this.isRequestSend = true;
-      this.queryParams._start += this.step;
-      this.queryParams._end += this.step;
+      this.sortParams._start += this.step;
+      this.sortParams._end += this.step;
 
-      const data = await this.loadData(this.queryParams);
+      const data = await this.loadData();
 
       this.addRows(data);
       this.isRequestSend = false;
     }
   }
 
-  constructor(header = [], {url = '', step = 20, start = 0, isSortLocally = false} = {}) {
+  constructor(header = [], {url = '', step = 30, start = 0, isSortLocally = false} = {}) {
     this.header = header;
     this.url = new URL(url, process.env.BACKEND_URL);    
     this.step = step;
-    this.queryParams._start = start;
-    this.queryParams._end = start + step;
-    this.queryParams._sort = header.find(item => item.sortable).id;
+    this.sortParams._sort = header.find(item => item.sortable).id;
+    this.sortParams._order = 'asc';    
+    this.sortParams._start = start;
+    this.sortParams._end = start + step;
     this.isSortLocally = isSortLocally;
 
     this.render();
@@ -113,7 +111,7 @@ export default class SortableTable {
       </span>
     `;
 
-    return id === this.queryParams._sort ? template : '';
+    return id === this.sortParams._sort ? template : '';
   }
 
   getBodyTemplate(data) {
@@ -153,7 +151,7 @@ export default class SortableTable {
     this.element = element.firstElementChild;
     this.subElements = this.getSubElements(this.element);
 
-    const data = await this.loadData(this.queryParams);
+    const data = await this.loadData();
 
     this.update(data);
   }
@@ -168,14 +166,21 @@ export default class SortableTable {
     }, {});
   }
 
-  async loadData(params = {}) {
+  async loadData(params) {
     this.element.classList.add('sortable-table_loading');
 
-    for (const key of Object.keys(params)) {
-      this.url.searchParams.set(key, params[key]);
+    if (params) {
+      this.filterParams = params;
     }
 
-    const data = await fetchJson(this.url);
+    const url = new URL(this.url);
+    const query = Object.assign({} ,this.filterParams, this.sortParams);
+
+    for (const key of Object.keys(query)) {
+      url.searchParams.set(key, query[key]);
+    }
+
+    const data = await fetchJson(url);
 
     this.element.classList.remove('sortable-table_loading');
 
@@ -215,8 +220,8 @@ export default class SortableTable {
     this.subElements.body.innerHTML = this.getBodyTemplate(sortedData);
   }
 
-  async sortOnServer(params) {
-    const data = await this.loadData(params);
+  async sortOnServer() {
+    const data = await this.loadData();
 
     this.update(data);
   }

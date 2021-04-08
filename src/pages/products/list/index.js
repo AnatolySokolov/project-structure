@@ -107,42 +107,26 @@ export default class Page {
     const filterName = this.subElements.filterName.value;
     const filterStatus = this.subElements.filterStatus.value;
     const params = {
-      from: this.components.doubleSlider.getValue().from,
-      to: this.components.doubleSlider.getValue().to
+      ['price_gte']: this.components.doubleSlider.getValue().from,
+      ['price_lte']: this.components.doubleSlider.getValue().to
     };
 
     if (filterName) {
-      params.filterName = filterName;
+      params['title_like'] = filterName;
     }
 
     if (filterStatus.length) {
-      params.filterStatus = filterStatus;
+      params.status = filterStatus;
     }
 
     return params;
   }
 
-  get query() {
-    const url = new URL(this.components.sortableTable.url);
-    const params = this.params;    
-    const queryMap = {
-      filterName: 'title_like',
-      filterStatus: 'status',
-      from: 'price_gte',
-      to: 'price_lte',
-    };
-
-    for (const key of Object.keys(params)) {
-      url.searchParams.set(queryMap[key], params[key]);
-    }
-
-    return url;
-  }
-
   updateComponents = async() => {
-    const data = await fetchJson(this.query);
+    const table = this.components.sortableTable;
+    const data = await table.loadData(this.params);
 
-    this.components.sortableTable.update(data);
+    table.update(data);
   }
 
   remove() {
