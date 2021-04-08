@@ -156,20 +156,20 @@ export default class ProductForm {
       if (categories) {
         this.renderCategories(categories);
       }
+    } else {
+      const categories = fetchJson(`${process.env.BACKEND_URL}api/rest/categories?_sort=weight&_refs=subcategory`);
+      const product = this.loadProductById(this.productId);
+      const [categoriesResponse, productResponse] = await Promise.all([categories, product]);
+
+      if (categoriesResponse) {
+        this.renderCategories(categoriesResponse);
+      }
+
+      if (productResponse) {
+        this.update(...productResponse);
+      }
     }
-
-    const categories = fetchJson(`${process.env.BACKEND_URL}api/rest/categories?_sort=weight&_refs=subcategory`);
-    const product = this.loadProductById(this.productId);
-    const [categoriesResponse, productResponse] = await Promise.all([categories, product]);
-
-    if (categoriesResponse) {
-      this.renderCategories(categoriesResponse);
-    }
-
-    if (productResponse) {
-      this.update(...productResponse);
-    }
-
+    
     return this.element;
   }
 
