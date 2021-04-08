@@ -39,7 +39,7 @@ export default class ProductForm {
           <div class="form-group form-group__half_left">
             <label class="form-label">Категория</label>
             <select id="subcategory" data-form="subcategory" class="form-control" name="subcategory">
-              <option value="">Категория &gt; Подкатегория</option>
+              
             </select>
           </div>
 
@@ -85,16 +85,6 @@ export default class ProductForm {
           required="${isReuired}">
       </fieldset>
     `;
-  }
-
-  renderOptions(arr = []) {
-    return arr
-      .map(item => {
-        return item.subcategories
-          .map(subcat => `<option value="${subcat.id}">${item.title} &gt; ${subcat.title}</option>`)
-          .join('');
-      })
-      .join('');
   }
 
   getImageElement(image = {}) {
@@ -143,24 +133,44 @@ export default class ProductForm {
     }, {});
   }
 
+  getOptions(arr = []) {
+    return arr
+      .map(item => {
+        return item.subcategories
+          .map(subcat => `<option value="${subcat.id}">${item.title} &gt; ${subcat.title}</option>`)
+          .join('');
+      })
+      .join('');
+  }
+
+  renderCategories(arr = []) {
+    const options = this.getOptions(arr);
+
+    this.subElements.productForm.subcategory.innerHTML = options;
+  }
+
   async render () {
-    if (!this.productId) return this.element;
+    if (!this.productId) {
+      const categories = await fetchJson(`${process.env.BACKEND_URL}api/rest/categories?_sort=weight&_refs=subcategory`);
+
+      if (categories) {
+        this.renderCategories(categories);
+      }
+    }
 
     const categories = fetchJson(`${process.env.BACKEND_URL}api/rest/categories?_sort=weight&_refs=subcategory`);
     const product = this.loadProductById(this.productId);
     const [categoriesResponse, productResponse] = await Promise.all([categories, product]);
 
     if (categoriesResponse) {
-      const options = this.renderOptions(categoriesResponse);
-
-      this.subElements.productForm.subcategory.innerHTML = options;
+      this.renderCategories(categoriesResponse);
     }
 
     if (productResponse) {
       this.update(...productResponse);
-
-      return this.element;
     }
+
+    return this.element;
   }
 
   async loadProductById(id) {
