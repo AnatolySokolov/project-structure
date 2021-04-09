@@ -1,4 +1,5 @@
 import ProductForm from '../../../components/product-form';
+import NotificationMessage from '../../../components/notification';
 import escapeHtml from '../../../utils/escape-html.js';
 import fetchJson from '../../../utils/fetch-json.js';
 
@@ -37,6 +38,7 @@ export default class Page {
 
 		this.initComponents();
 		this.renderComponents();
+		this.initEventListeners();
 
 		return this.element;
 	}
@@ -62,6 +64,15 @@ export default class Page {
   	const container = this.subElements.productForm;
 
   	container.append(form);
+  }
+
+  initEventListeners() {
+  	this.components.productForm.element.addEventListener('successful-form-confirmation', event => {
+  		const message =  event.detail;
+  		const notification = new NotificationMessage(message);
+
+  		notification.show();
+  	});
   }
 
   remove() {

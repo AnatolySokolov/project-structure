@@ -274,11 +274,18 @@ export default class ProductForm {
       body: JSON.stringify(this.getFormElementsData()),
     });
 
-    const customEventName = this.productId ? 'product-updated' : 'product-saved';
+    let customEventName, customEventMessage;
+
+    if (response) {
+      customEventName = 'successful-form-confirmation';
+      customEventMessage = this.productId ? 'product-updated' : 'product-saved';
+    } else {
+      customEventName = 'error-from-confirmation';
+    }
 
     this.element.dispatchEvent(new CustomEvent(customEventName, {
       bubbles: true,
-      detail: event
+      detail: customEventMessage
     }));
   }
 

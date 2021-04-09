@@ -1,4 +1,5 @@
 import Category from '../../components/categories';
+import NotificationMessage from '../../components/notification';
 import fetchJson from '../../utils/fetch-json.js';
 
 export default class Page {
@@ -47,15 +48,20 @@ export default class Page {
 
   	this.subElements.categories.append(...categories);
     this.components = {categories};
-    this.initListeners();
+    this.initEventListeners();
   }
 
-  initListeners() {
+  initEventListeners() {
     this.subElements.categories.addEventListener('pointerdown', Category.onCategoriesPointerdown);
+    this.subElements.categories.addEventListener('sortable-list-reorder', event => {
+      const {from, to} = event.detail;
+      const notification = new NotificationMessage('category order saved');
+
+      notification.show();
+    });
   }
 
   destroy() {
-    this.subElements.categories.removeEventListener('pointerdown', Category.onCategoriesPointerdown);
     this.element.remove();
     this.subElements = {};
     this.components = {};

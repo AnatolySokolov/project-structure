@@ -106,16 +106,6 @@ export default class SortableList {
     document.removeEventListener('pointerup', this.onDocumentPointerup);
   }
 
-  dispatchCustomEvent() {
-    this.element.dispatchEvent(new CustomEvent('sortable-list-reorder', {
-      bubbles: true,
-      detail: {
-        from: this.initialIndex,
-        to: this.placeholderIndex
-      }
-    }));
-  }
-
   remove() {
     this.element.remove();
   }
