@@ -3,13 +3,13 @@ import SortableList from '../sortable-list';
 export default class Category {
 	element;
 
-	static onCategoriesPointerdown = (event) => {
+	static onCategoriesPointerdown = event => {
 		const header = event.target.closest('.category__header');
 
 		if (header) header.parentElement.classList.toggle('category_open');		
 	}
 
-	constructor(item = {}, container) {
+	constructor(item = {}) {
 		this.item = item;
 
 		this.render();

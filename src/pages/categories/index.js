@@ -6,6 +6,35 @@ export default class Page {
 	element;
 	subElements = {};
 	components = {};
+  categories = [];
+
+  onSortableListReorder = async event => {
+    const {from, to} = event.detail;
+    const id = event.target.closest('[data-id]').dataset.id;
+    const subcategories = this.categories.find(item => item.id === id).subcategories;
+    const category = subcategories.splice(from, 1);
+
+    subcategories.splice(to, 0, ...category);
+    subcategories.forEach((item, i) => item.weight = i + 1);
+
+    const response = await fetchJson(new URL('api/rest/subcategories', process.env.BACKEND_URL), {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      body: JSON.stringify(subcategories)
+    });
+
+    let notification;
+
+    if (response) {
+      notification = new NotificationMessage('category order saved');
+    } else {
+      notification = new NotificationMessage('category order didn`t save', {type: 'error'});
+    }
+
+    notification.show();
+  }
 
 	get template() {
 		return `
@@ -46,19 +75,14 @@ export default class Page {
   	const data = await fetchJson(url);
     const categories = data.map(item => new Category(item).element);
 
+    this.categories = data;
   	this.subElements.categories.append(...categories);
-    this.components = {categories};
     this.initEventListeners();
   }
 
   initEventListeners() {
     this.subElements.categories.addEventListener('pointerdown', Category.onCategoriesPointerdown);
-    this.subElements.categories.addEventListener('sortable-list-reorder', event => {
-      const {from, to} = event.detail;
-      const notification = new NotificationMessage('category order saved');
-
-      notification.show();
-    });
+    this.subElements.categories.addEventListener('sortable-list-reorder', this.onSortableListReorder);
   }
 
   destroy() {
