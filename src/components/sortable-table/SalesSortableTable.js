@@ -1,7 +1,7 @@
 import SortableTable from './';
 
 export default class SalesSortableTable extends SortableTable {
-	getBodyTemplate(data) {
+  getBodyTemplate(data) {
     return data
       .map(item => {
         return `

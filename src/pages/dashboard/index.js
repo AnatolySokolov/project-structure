@@ -16,7 +16,7 @@ export default class Page {
       <div class="dashboard full-height flex-column">
 
         <div class="content__top-panel">
-          <h2 class="page-title">Панель управления</h2>
+          <h2 class="page-title">Dashboard</h2>
           <div data-element="rangePicker"></div>
         </div>
 
@@ -25,7 +25,7 @@ export default class Page {
           <div data-element="salesChart"></div>
           <div data-element="customersChart"></div>
         </div>
-        <h3 class="block-title">Лидеры продаж</h3>
+        <h3 class="block-title">Sales leaders</h3>
         <div data-element="sortableTable"></div>
 
       </div>
@@ -68,7 +68,7 @@ export default class Page {
       url: 'api/dashboard/orders',
       range: dateRange,
       label: 'orders',
-      link:'#'
+      link: '#'
     });
 
     const salesChart = new ColumnChart({
@@ -84,15 +84,14 @@ export default class Page {
       label: 'customers'
     });
 
-    const sortableTable = new SortableTable(
-      header,
-      {
-        url: `api/dashboard/bestsellers?from=${encodeURIComponent(dateRange.from)}&to${encodeURIComponent(dateRange.to)}`,
-        step: 30,
-        start: 1,
-        isSortLocally: true
-      }
-    );
+    const sortableTable = new SortableTable(header, {
+      url: `api/dashboard/bestsellers?from=${encodeURIComponent(
+        dateRange.from
+      )}&to${encodeURIComponent(dateRange.to)}`,
+      step: 30,
+      start: 1,
+      isSortLocally: true
+    });
 
     this.components = {
       rangePicker,
@@ -130,7 +129,7 @@ export default class Page {
       const { from, to } = event.detail;
 
       this.updateComponents(from, to);
-    })
+    });
   }
 
   remove() {

@@ -2,14 +2,14 @@
 // status >= 400 is an error
 // network error / json error are errors
 
-export default async function(url, params) {
+export default async function (url, params) {
   let response;
 
   try {
     // NOTE: "toString" call needed for correct work of "jest-fetch-mock"
     response = await fetch(url.toString(), params);
-  } catch(err) {
-    throw new FetchError(response, "Network error has occurred.");
+  } catch (err) {
+    throw new FetchError(response, 'Network error has occurred.');
   }
 
   let body;
@@ -20,8 +20,13 @@ export default async function(url, params) {
     try {
       body = await response.json();
 
-      errorText = (body.error && body.error.message) || (body.data && body.data.error && body.data.error.message) || errorText;
-    } catch (error) { /* ignore failed body */ }
+      errorText =
+        (body.error && body.error.message) ||
+        (body.data && body.data.error && body.data.error.message) ||
+        errorText;
+    } catch (error) {
+      /* ignore failed body */
+    }
 
     let message = `Error ${response.status}: ${errorText}`;
 
@@ -30,13 +35,13 @@ export default async function(url, params) {
 
   try {
     return await response.json();
-  } catch(err) {
+  } catch (err) {
     throw new FetchError(response, null, err.message);
   }
 }
 
 export class FetchError extends Error {
-  name = "FetchError";
+  name = 'FetchError';
 
   constructor(response, body, message) {
     super(message);
@@ -51,4 +56,3 @@ window.addEventListener('unhandledrejection', event => {
     alert(event.reason.message);
   }
 });
-

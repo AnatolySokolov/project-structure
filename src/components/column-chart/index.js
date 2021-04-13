@@ -1,4 +1,4 @@
-import fetchJson from "../../utils/fetch-json.js";
+import fetchJson from '../../utils/fetch-json.js';
 
 export default class ColumnChart {
   element;
@@ -12,7 +12,7 @@ export default class ColumnChart {
     url = '',
     range = {
       from: new Date(),
-      to: new Date(),
+      to: new Date()
     }
   } = {}) {
     this.url = new URL(url, process.env.BACKEND_URL);
@@ -37,7 +37,7 @@ export default class ColumnChart {
   }
 
   getHeaderValue(data) {
-    return this.formatHeading(Object.values(data).reduce((accum, item) => (accum + item), 0));
+    return this.formatHeading(Object.values(data).reduce((accum, item) => accum + item, 0));
   }
 
   async loadData(from, to) {
@@ -68,17 +68,21 @@ export default class ColumnChart {
   getColumnBody(data) {
     const maxValue = Math.max(...Object.values(data));
 
-    return Object.entries(data).map(([key, value]) => {
-      const scale = this.chartHeight / maxValue;
-      const percent = (value / maxValue * 100).toFixed(0);
-      const tooltip = `<span>
-        <small>${key.toLocaleString('default', {dateStyle: 'medium'})}</small>
+    return Object.entries(data)
+      .map(([key, value]) => {
+        const scale = this.chartHeight / maxValue;
+        const percent = ((value / maxValue) * 100).toFixed(0);
+        const tooltip = `<span>
+        <small>${key.toLocaleString('default', { dateStyle: 'medium' })}</small>
         <br>
         <strong>${percent}%</strong>
       </span>`;
 
-      return `<div style="--value: ${Math.floor(value * scale)}" data-tooltip="${tooltip}"></div>`;
-    }).join('');
+        return `<div style="--value: ${Math.floor(
+          value * scale
+        )}" data-tooltip="${tooltip}"></div>`;
+      })
+      .join('');
   }
 
   getLink() {
@@ -87,7 +91,9 @@ export default class ColumnChart {
 
   get template() {
     return `
-      <div class="column-chart dashboard__chart_${this.label} column-chart_loading" style="--chart-height: ${this.chartHeight}">
+      <div class="column-chart dashboard__chart_${
+        this.label
+      } column-chart_loading" style="--chart-height: ${this.chartHeight}">
         <div class="column-chart__title">
           Total ${this.label}
           ${this.getLink()}

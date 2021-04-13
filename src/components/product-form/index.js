@@ -7,7 +7,7 @@ export default class ProductForm {
   subElements = {};
   url = new URL('api/rest/products', process.env.BACKEND_URL);
 
-  constructor (productId) {
+  constructor(productId) {
     this.productId = productId;
 
     this.renderForm();
@@ -20,50 +20,49 @@ export default class ProductForm {
         <form data-element="productForm" class="form-grid">
 
           <div class="form-group form-group__half_left">
-            ${this.createFieldset('Название товара', 'title', 'text', 'Название товара', true)}
+            ${this.createFieldset('Product name', 'title', 'text', 'Product name', true)}
           </div>
 
           <div class="form-group form-group__wide">
-            <label class="form-label">Описание</label>
+            <label class="form-label">Description</label>
             <textarea required="" class="form-control" name="description"
-            data-form="description" placeholder="Описание товара"></textarea>
+            data-form="description" placeholder="Product description"></textarea>
           </div>
 
           <div class="form-group form-group__wide" data-element="sortable-list-container">
-            <label class="form-label">Фото</label>
+            <label class="form-label">Images</label>
             <div data-element="imageListContainer"></div>
-            <button type="button" name="uploadImage" class="button-primary-outline"><span>Загрузить</span></button>
+            <button type="button" name="uploadImage" class="button-primary-outline"><span>Upload</span></button>
             <input data-element="upload" name="upload" type="file" hidden>
           </div>
 
           <div class="form-group form-group__half_left">
-            <label class="form-label">Категория</label>
-            <select id="subcategory" data-form="subcategory" class="form-control" name="subcategory">
-              
+            <label class="form-label">Category</label>
+            <select id="subcategory" data-form="subcategory" class="form-control" name="subcategory">              
             </select>
           </div>
 
           <div class="form-group form-group__half_left form-group__two-col">
-            ${this.createFieldset('Цена ($)', 'price', 'number', '100', true)}
-            ${this.createFieldset('Скидка ($)', 'discount', 'number', '0', true)}
+            ${this.createFieldset('Price ($)', 'price', 'number', '100', true)}
+            ${this.createFieldset('Discount ($)', 'discount', 'number', '0', true)}
           </div>
 
           <div class="form-group form-group__part-half">
-            <label class="form-label">Количество</label>
+            <label class="form-label">Quantity</label>
             <input data-form="quantity" required="" type="number" class="form-control" name="quantity" placeholder="1">
           </div>
 
           <div class="form-group form-group__part-half">
-            <label class="form-label">Статус</label>
+            <label class="form-label">Status</label>
             <select data-form="status" class="form-control" name="status">
-              <option value="1">Активен</option>
-              <option value="0">Неактивен</option>
+              <option value="1">Active</option>
+              <option value="0">Inactive</option>
             </select>
           </div>
 
           <div class="form-buttons">
             <button type="submit" name="save" class="button-primary-outline">
-              Сохранить товар
+              Save product
             </button>
           </div>
 
@@ -126,7 +125,7 @@ export default class ProductForm {
   getSubElements(element) {
     const elements = element.querySelectorAll('[data-element]');
 
-    return [...elements].reduce( (acc, subElement) => {
+    return [...elements].reduce((acc, subElement) => {
       acc[subElement.dataset.element] = subElement;
 
       return acc;
@@ -149,15 +148,19 @@ export default class ProductForm {
     this.subElements.productForm.subcategory.innerHTML = options;
   }
 
-  async render () {
+  async render() {
     if (!this.productId) {
-      const categories = await fetchJson(`${process.env.BACKEND_URL}api/rest/categories?_sort=weight&_refs=subcategory`);
+      const categories = await fetchJson(
+        `${process.env.BACKEND_URL}api/rest/categories?_sort=weight&_refs=subcategory`
+      );
 
       if (categories) {
         this.renderCategories(categories);
       }
     } else {
-      const categories = fetchJson(`${process.env.BACKEND_URL}api/rest/categories?_sort=weight&_refs=subcategory`);
+      const categories = fetchJson(
+        `${process.env.BACKEND_URL}api/rest/categories?_sort=weight&_refs=subcategory`
+      );
       const product = this.loadProductById(this.productId);
       const [categoriesResponse, productResponse] = await Promise.all([categories, product]);
 
@@ -169,12 +172,12 @@ export default class ProductForm {
         this.update(...productResponse);
       }
     }
-    
+
     return this.element;
   }
 
   async loadProductById(id) {
-    const url = new URL (this.url);
+    const url = new URL(this.url);
 
     url.searchParams.set('id', id);
 
@@ -228,14 +231,14 @@ export default class ProductForm {
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
   onUploadImageClick = () => {
     this.subElements.upload.click();
-  }
+  };
 
   getFormElementsData() {
-    const data ={};
+    const data = {};
     const elements = this.element.querySelectorAll('[data-form]');
     const toNumber = ['price', 'quantity', 'discount', 'status'];
 
@@ -253,9 +256,9 @@ export default class ProductForm {
 
     [...urls].forEach((item, i) => {
       data.images.push({
-        "url": item.value,
-        "source": sources[i].value
-      })
+        url: item.value,
+        source: sources[i].value
+      });
     });
 
     if (this.productId) data.id = this.productId;
@@ -271,7 +274,7 @@ export default class ProductForm {
       headers: {
         'Content-Type': 'application/json;charset=utf-8'
       },
-      body: JSON.stringify(this.getFormElementsData()),
+      body: JSON.stringify(this.getFormElementsData())
     });
 
     let customEventName, customEventMessage;
@@ -283,11 +286,13 @@ export default class ProductForm {
       customEventName = 'error-from-confirmation';
     }
 
-    this.element.dispatchEvent(new CustomEvent(customEventName, {
-      bubbles: true,
-      detail: customEventMessage
-    }));
-  }
+    this.element.dispatchEvent(
+      new CustomEvent(customEventName, {
+        bubbles: true,
+        detail: customEventMessage
+      })
+    );
+  };
 
   addListeners() {
     this.subElements.upload.addEventListener('change', this.upload);

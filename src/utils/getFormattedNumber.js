@@ -1,4 +1,4 @@
-export default function(number, divider) {
+export default function (number, divider) {
   const arr = String(number).split('');
 
   if (arr.length > 3 && arr.length <= 6) {

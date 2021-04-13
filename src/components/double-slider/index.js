@@ -26,7 +26,11 @@ export default class DoubleSlider {
   onThumbPointerMove = event => {
     event.preventDefault();
 
-    const { left: innerLeft, right: innerRight, width } = this.subElements.inner.getBoundingClientRect();
+    const {
+      left: innerLeft,
+      right: innerRight,
+      width
+    } = this.subElements.inner.getBoundingClientRect();
 
     if (this.dragging === this.subElements.thumbLeft) {
       let newLeft = (event.clientX - innerLeft + this.shiftX) / width;
@@ -69,10 +73,12 @@ export default class DoubleSlider {
     document.removeEventListener('pointermove', this.onThumbPointerMove);
     document.removeEventListener('pointerup', this.onThumbPointerUp);
 
-    this.element.dispatchEvent(new CustomEvent('range-select', {
-      detail: this.getValue(),
-      bubbles: true
-    }));
+    this.element.dispatchEvent(
+      new CustomEvent('range-select', {
+        detail: this.getValue(),
+        bubbles: true
+      })
+    );
   };
 
   constructor({
@@ -144,8 +150,8 @@ export default class DoubleSlider {
 
   update() {
     const rangeTotal = this.max - this.min;
-    const left = Math.floor((this.selected.from - this.min) / rangeTotal * 100) + '%';
-    const right = Math.floor((this.max - this.selected.to) / rangeTotal * 100) + '%';
+    const left = Math.floor(((this.selected.from - this.min) / rangeTotal) * 100) + '%';
+    const right = Math.floor(((this.max - this.selected.to) / rangeTotal) * 100) + '%';
 
     this.subElements.progress.style.left = left;
     this.subElements.progress.style.right = right;

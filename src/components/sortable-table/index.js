@@ -1,4 +1,4 @@
-import fetchJson from "../../utils/fetch-json.js";
+import fetchJson from '../../utils/fetch-json.js';
 
 export default class SortableTable {
   element;
@@ -9,9 +9,9 @@ export default class SortableTable {
   isSortLocally = false;
   isRequestSend = false;
 
-  onHeaderPointerdown = async (event) => {
+  onHeaderPointerdown = async event => {
     const columnHeader = event.target.closest('.sortable-table__cell');
-    const {id, order, sortable} = columnHeader.dataset;
+    const { id, order, sortable } = columnHeader.dataset;
 
     if (sortable === 'false') return;
 
@@ -24,19 +24,19 @@ export default class SortableTable {
     columnHeader.append(this.subElements.arrow);
 
     this.sortParams._sort = id;
-    this.sortParams._order = orderToggle[order];   
+    this.sortParams._order = orderToggle[order];
 
     if (this.isSortLocally) {
       this.sort(this.sortParams._sort, this.sortParams._order);
     } else {
       this.sortOnServer();
     }
-  }
+  };
 
   onDocumentScroll = async () => {
     if (this.isRequestSend || this.isSortLocally) return;
 
-    const {bottom} = document.documentElement.getBoundingClientRect();
+    const { bottom } = document.documentElement.getBoundingClientRect();
     const htmlHeight = document.documentElement.clientHeight;
     const gap = 200;
 
@@ -50,14 +50,14 @@ export default class SortableTable {
       this.addRows(data);
       this.isRequestSend = false;
     }
-  }
+  };
 
-  constructor(header = [], {url = '', step = 30, start = 0, isSortLocally = false} = {}) {
+  constructor(header = [], { url = '', step = 30, start = 0, isSortLocally = false } = {}) {
     this.header = header;
-    this.url = new URL(url, process.env.BACKEND_URL);    
+    this.url = new URL(url, process.env.BACKEND_URL);
     this.step = step;
     this.sortParams._sort = header.find(item => item.sortable).id;
-    this.sortParams._order = 'asc';    
+    this.sortParams._order = 'asc';
     this.sortParams._start = start;
     this.sortParams._end = start + step;
     this.isSortLocally = isSortLocally;
@@ -82,8 +82,8 @@ export default class SortableTable {
 
         <div data-element="emptyPlaceholder" class="sortable-table__empty-placeholder">
           <div>
-            <p>Не найдено товаров удовлетворяющих выбранному критерию</p>
-            <button data-element="reset" type="button" class="button-primary-outline">Очистить фильтры</button>
+            <p>No products found matching the selected criteria</p>
+            <button data-element="reset" type="button" class="button-primary-outline">Clear filters</button>
           </div>
         </div>
 
@@ -95,9 +95,11 @@ export default class SortableTable {
     return this.header.map(item => this.getHeaderRowTemplate(item)).join('');
   }
 
-  getHeaderRowTemplate({id, title, sortable}) {
+  getHeaderRowTemplate({ id, title, sortable }) {
     return `
-      <div class="sortable-table__cell" data-id="${id}" data-sortable="${sortable}" ${sortable ? 'data-order="asc"' : ''}>
+      <div class="sortable-table__cell" data-id="${id}" data-sortable="${sortable}" ${
+      sortable ? 'data-order="asc"' : ''
+    }>
         <span>${title}</span>
         ${this.getHeaderArrowTemplate(id)}
       </div>
@@ -128,8 +130,8 @@ export default class SortableTable {
 
   getCellTemplate(item) {
     return this.header
-      .map(({id, template}) => {
-        if (id === 'images' && !item[id].length) {          
+      .map(({ id, template }) => {
+        if (id === 'images' && !item[id].length) {
           return `
             <div class="sortable-table__cell">
               <img class="sortable-table-image" alt="no-image" src="#">
@@ -139,12 +141,12 @@ export default class SortableTable {
           return template(item[id]);
         } else {
           return `<div class="sortable-table__cell">${item[id]}</div>`;
-        }     
+        }
       })
-      .join('');        
+      .join('');
   }
 
-  async render(){
+  async render() {
     const element = document.createElement('div');
 
     element.innerHTML = this.template;
@@ -159,7 +161,7 @@ export default class SortableTable {
   getSubElements(element) {
     const elements = element.querySelectorAll('[data-element]');
 
-    return [...elements].reduce( (acc, subElement) => {
+    return [...elements].reduce((acc, subElement) => {
       acc[subElement.dataset.element] = subElement;
 
       return acc;
@@ -174,7 +176,7 @@ export default class SortableTable {
     }
 
     const url = new URL(this.url);
-    const query = Object.assign({} ,this.filterParams, this.sortParams);
+    const query = Object.assign({}, this.filterParams, this.sortParams);
 
     for (const key of Object.keys(query)) {
       url.searchParams.set(key, query[key]);
@@ -199,10 +201,10 @@ export default class SortableTable {
 
   makeSort(field, order) {
     const arr = [...this.data];
-    const {sortType} = this.header.find(item => item.id === field);
+    const { sortType } = this.header.find(item => item.id === field);
     const direction = order === 'asc' ? 1 : -1;
 
-    return arr.sort( (a, b) => {
+    return arr.sort((a, b) => {
       switch (sortType) {
         case 'string':
           return direction * a[field].localeCompare(b[field], ['ru', 'en'], { caseFirst: 'upper' });
@@ -232,7 +234,7 @@ export default class SortableTable {
   }
 
   addRows(data) {
-    this.subElements.body.insertAdjacentHTML('beforeend', this.getBodyTemplate(data));    
+    this.subElements.body.insertAdjacentHTML('beforeend', this.getBodyTemplate(data));
   }
 
   remove() {

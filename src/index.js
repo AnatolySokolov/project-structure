@@ -16,5 +16,6 @@ router
   .setNotFoundPagePath('error404')
   .listen();
 
-document.querySelector('.sidebar__toggler').addEventListener('pointerdown', () => 
-	document.body.classList.toggle('is-collapsed-sidebar'));
+document
+  .querySelector('.sidebar__toggler')
+  .addEventListener('pointerdown', () => document.body.classList.toggle('is-collapsed-sidebar'));

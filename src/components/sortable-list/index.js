@@ -19,11 +19,11 @@ export default class SortableList {
     } else {
       currentItem.after(this.placeholder);
     }
-  }
+  };
 
   onDocumentPointerup = () => {
     this.dragStop();
-  }
+  };
 
   constructor(items = []) {
     this.items = items;
@@ -35,7 +35,7 @@ export default class SortableList {
     this.element = document.createElement('ul');
     this.element.classList.add('sortable-list');
     this.items.forEach(item => item.classList.add('sortable-list__item'));
-    this.element.append(... this.items);
+    this.element.append(...this.items);
     this.element.addEventListener('pointerdown', event => this.onPointerdown(event));
   }
 
@@ -50,7 +50,7 @@ export default class SortableList {
     if (event.target.closest('[data-delete-handle]')) item.remove();
   }
 
-  dragStart({clientX, clientY}, item) {
+  dragStart({ clientX, clientY }, item) {
     this.initialIndex = [...this.element.children].indexOf(item);
     this.initialShift = {
       x: clientX - item.getBoundingClientRect().x,
@@ -82,7 +82,7 @@ export default class SortableList {
   }
 
   dragStop() {
-    const currnetIndex = [... this.element.children].indexOf(this.placeholder);
+    const currnetIndex = [...this.element.children].indexOf(this.placeholder);
 
     this.placeholder.replaceWith(this.draggingItem);
     this.draggingItem.classList.remove('sortable-list__item_dragging');
@@ -93,13 +93,15 @@ export default class SortableList {
     this.draggingItem = null;
 
     if (currnetIndex !== this.initialIndex) {
-      this.element.dispatchEvent(new CustomEvent('sortable-list-reorder', {
-        bubbles: true,
-        detail: {
-          from: this.initialIndex,
-          to: currnetIndex
-        }
-      }));
+      this.element.dispatchEvent(
+        new CustomEvent('sortable-list-reorder', {
+          bubbles: true,
+          detail: {
+            from: this.initialIndex,
+            to: currnetIndex
+          }
+        })
+      );
     }
 
     document.removeEventListener('pointermove', this.onDocumentPointermove);

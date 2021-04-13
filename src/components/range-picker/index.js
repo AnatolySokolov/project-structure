@@ -8,7 +8,7 @@ export default class RangePicker {
   };
 
   static formatDate(date) {
-    return date.toLocaleString('ru', {dateStyle: 'short'});
+    return date.toLocaleString('ru', { dateStyle: 'short' });
   }
 
   onDocumentClick = event => {
@@ -20,9 +20,9 @@ export default class RangePicker {
     }
   };
 
-  constructor({from = new Date(), to = new Date()} = {}) {
+  constructor({ from = new Date(), to = new Date() } = {}) {
     this.showDateFrom = new Date(from);
-    this.selected = {from, to};
+    this.selected = { from, to };
 
     this.render();
   }
@@ -62,7 +62,7 @@ export default class RangePicker {
   }
 
   initEventListeners() {
-    const {input, selector} = this.subElements;
+    const { input, selector } = this.subElements;
 
     document.addEventListener('click', this.onDocumentClick, true);
     input.addEventListener('click', () => this.toggle());
@@ -74,7 +74,7 @@ export default class RangePicker {
     this.renderDateRangePicker();
   }
 
-  onSelectorClick({target}) {
+  onSelectorClick({ target }) {
     if (target.classList.contains('rangepicker__cell')) {
       this.onRangePickerCellClick(target);
     }
@@ -156,14 +156,14 @@ export default class RangePicker {
   renderCalendar(showDate) {
     const date = new Date(showDate);
     const getGridStartIndex = dayIndex => {
-      const index = dayIndex === 0 ? 6 : (dayIndex - 1); // make Sunday (0) the last day
+      const index = dayIndex === 0 ? 6 : dayIndex - 1; // make Sunday (0) the last day
       return index + 1;
     };
 
     date.setDate(1);
 
     // text-transform: capitalize
-    const monthStr = date.toLocaleString('ru', {month: 'long'});
+    const monthStr = date.toLocaleString('ru', { month: 'long' });
 
     let table = `<div class="rangepicker__calendar">
       <div class="rangepicker__month-indicator">
@@ -239,10 +239,12 @@ export default class RangePicker {
   }
 
   dispatchEvent() {
-    this.element.dispatchEvent(new CustomEvent('date-select', {
-      bubbles: true,
-      detail: this.selected
-    }));
+    this.element.dispatchEvent(
+      new CustomEvent('date-select', {
+        bubbles: true,
+        detail: this.selected
+      })
+    );
   }
 
   remove() {

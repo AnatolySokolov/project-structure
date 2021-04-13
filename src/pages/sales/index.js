@@ -3,36 +3,36 @@ import SortableTable from '../../components/sortable-table/SalesSortableTable.js
 import header from './sales-header.js';
 import fetchJson from '../../utils/fetch-json.js';
 
-export default class Page{
-	element;
-	subElements;
-	components;
+export default class Page {
+  element;
+  subElements;
+  components;
 
-	get template() {
-		return `
+  get template() {
+    return `
 			<div class="sales full-height flex-column">
 				<div class="content__top-panel">
-					<h1 class="page-title">Продажи</h1>
+					<h1 class="page-title">Sales</h1>
 					<div data-element="rangePicker" class="rangepicker"></div>
 				</div>
 				<div data-element="sortableTable" class="full-height flex-column"></div>
 			</div>
 		`;
-	}
+  }
 
-	render() {
-		const wrapper = document.createElement('div');
+  render() {
+    const wrapper = document.createElement('div');
 
-		wrapper.innerHTML = this.template;
-		this.element = wrapper.firstElementChild;
-		this.subElements = this.getSubElements(this.element);
+    wrapper.innerHTML = this.template;
+    this.element = wrapper.firstElementChild;
+    this.subElements = this.getSubElements(this.element);
 
-		this.initComponents();
-		this.renderComponents();
+    this.initComponents();
+    this.renderComponents();
     this.initEventListeners();
 
-		return this.element;
-	}
+    return this.element;
+  }
 
   getSubElements(element) {
     const elements = element.querySelectorAll('[data-element]');
@@ -50,19 +50,18 @@ export default class Page{
       to: new Date()
     };
 
-  	const rangePicker = new RangePicker(dateRange);
+    const rangePicker = new RangePicker(dateRange);
 
-  	const sortableTable = new SortableTable(
-  		header,
-  		{
-  			url: `api/rest/orders?createdAt_gte=${encodeURIComponent(dateRange.from)}&createdAt_lte${encodeURIComponent(dateRange.to)}`,
-  		}
-  	);
+    const sortableTable = new SortableTable(header, {
+      url: `api/rest/orders?createdAt_gte=${encodeURIComponent(
+        dateRange.from
+      )}&createdAt_lte${encodeURIComponent(dateRange.to)}`
+    });
 
-  	this.components = {
-  		rangePicker,
-  		sortableTable
-  	}
+    this.components = {
+      rangePicker,
+      sortableTable
+    };
   }
 
   renderComponents() {
@@ -78,7 +77,7 @@ export default class Page{
       const { from, to } = event.detail;
 
       this.updateComponents(from, to);
-    })
+    });
   }
 
   async updateComponents(from, to) {
@@ -88,7 +87,7 @@ export default class Page{
     url.searchParams.set('createdAt_lte', to);
 
     const data = await fetchJson(url);
-    
+
     this.components.sortableTable.update(data);
   }
 

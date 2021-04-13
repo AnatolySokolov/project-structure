@@ -15,7 +15,7 @@ const MiniCssExtractPluginLoader = {
 module.exports = [
   devMode ? { ...styleLoader } : { ...MiniCssExtractPluginLoader },
   {
-    loader: 'css-loader',
+    loader: 'css-loader'
     // The modules option enables/disables the CSS Modules specification and setup basic behaviour.
     // https://webpack.js.org/loaders/css-loader/#modules
     // options: {

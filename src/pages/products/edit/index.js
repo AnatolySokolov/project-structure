@@ -4,16 +4,16 @@ import escapeHtml from '../../../utils/escape-html.js';
 import fetchJson from '../../../utils/fetch-json.js';
 
 export default class Page {
-	element;
-	subElements = {};
-	components = {};
+  element;
+  subElements = {};
+  components = {};
 
-	constructor(productId) {
-		this.productId = productId;
-	}
+  constructor(productId) {
+    this.productId = productId;
+  }
 
-	get template() {
-		return `
+  get template() {
+    return `
 			<div class="products-edit">
 
 				<div class="content__top-panel">
@@ -27,26 +27,26 @@ export default class Page {
 
 			</div>
 		`;
-	}
+  }
 
-	render() {
-		const wrapper = document.createElement('div');
+  render() {
+    const wrapper = document.createElement('div');
 
-		wrapper.innerHTML = this.template;
-		this.element = wrapper.firstElementChild;
-		this.subElements = this.getSubElements(this.element);
+    wrapper.innerHTML = this.template;
+    this.element = wrapper.firstElementChild;
+    this.subElements = this.getSubElements(this.element);
 
-		this.initComponents();
-		this.renderComponents();
-		this.initEventListeners();
+    this.initComponents();
+    this.renderComponents();
+    this.initEventListeners();
 
-		return this.element;
-	}
+    return this.element;
+  }
 
   getSubElements(element) {
     const elements = element.querySelectorAll('[data-element]');
 
-    return [...elements].reduce( (acc, subElement) => {
+    return [...elements].reduce((acc, subElement) => {
       acc[subElement.dataset.element] = subElement;
 
       return acc;
@@ -54,32 +54,32 @@ export default class Page {
   }
 
   initComponents() {
-  	const productForm = new ProductForm(this.productId);
+    const productForm = new ProductForm(this.productId);
 
-  	this.components = { productForm };
+    this.components = { productForm };
   }
 
   async renderComponents() {
-  	const form = await this.components.productForm.render();
-  	const container = this.subElements.productForm;
+    const form = await this.components.productForm.render();
+    const container = this.subElements.productForm;
 
-  	container.append(form);
+    container.append(form);
   }
 
   initEventListeners() {
-  	this.components.productForm.element.addEventListener('successful-form-confirmation', event => {
-  		const message =  event.detail;
-  		const notification = new NotificationMessage(message);
+    this.components.productForm.element.addEventListener('successful-form-confirmation', event => {
+      const message = event.detail;
+      const notification = new NotificationMessage(message);
 
-  		notification.show();
-  	});
+      notification.show();
+    });
   }
 
   remove() {
-  	this.element.remove();
+    this.element.remove();
   }
 
   destroy() {
-  	this.remove();
+    this.remove();
   }
 }

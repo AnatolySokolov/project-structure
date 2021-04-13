@@ -6,12 +6,12 @@ class Tooltip {
     const shift = 10;
     const bodyBorder = {
       right: document.body.offsetWidth - this.element.offsetWidth - shift
-    }
+    };
 
     let left, top;
 
     if (event.clientX <= bodyBorder.right) {
-      left = event.clientX + shift
+      left = event.clientX + shift;
     } else {
       left = bodyBorder.right;
     }
@@ -20,7 +20,7 @@ class Tooltip {
 
     this.element.style.left = left + 'px';
     this.element.style.top = top + 'px';
-  }
+  };
 
   onDocumentPointerover = event => {
     const element = event.target.closest('[data-tooltip]');
@@ -29,14 +29,14 @@ class Tooltip {
       this.render(element.dataset.tooltip);
       document.addEventListener('mousemove', this.onMouseMove);
     }
-  }
+  };
 
   onDocumentPointerout = () => {
     if (this.element) {
       document.removeEventListener('mousemove', this.onMouseMove);
       this.element.remove();
     }
-  }
+  };
 
   constructor() {
     if (Tooltip.instance) return Tooltip.instance;
