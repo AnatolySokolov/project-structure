@@ -8,7 +8,7 @@ module.exports = merge(common, {
   mode: 'production',
   devtool: 'source-map',
   output: {
-    publicPath: '/',
+    publicPath: 'https://anatolysokolov.github.io/project-structure/',
     path: path.resolve(__dirname, '../build')
   },
   optimization: {
