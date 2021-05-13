@@ -4,10 +4,10 @@
 @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap);
 @font-face {
   font-family: 'fontello';
-  src: url(/fonts/fontello.eot);
-  src: url(/fonts/fontello.eot) format('embedded-opentype'),
-    url(/fonts/fontello.woff2) format('woff2'), url(/fonts/fontello.woff) format('woff'),
-    url(/fonts/fontello.ttf) format('truetype'), url(/fonts/fontello.svg) format('svg');
+  src: url(https://anatolysokolov.github.io/project-structure/fonts/fontello.eot);
+  src: url(https://anatolysokolov.github.io/project-structure/fonts/fontello.eot) format('embedded-opentype'),
+    url(https://anatolysokolov.github.io/project-structure/fonts/fontello.woff2) format('woff2'), url(https://anatolysokolov.github.io/project-structure/fonts/fontello.woff) format('woff'),
+    url(https://anatolysokolov.github.io/project-structure/fonts/fontello.ttf) format('truetype'), url(https://anatolysokolov.github.io/project-structure/fonts/fontello.svg) format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -654,7 +654,7 @@ body {
   margin-top: -9px;
   height: 18px;
   width: 6px;
-  background: url(/images/range-thumb-icon.svg) left center no-repeat;
+  background: url(https://anatolysokolov.github.io/project-structure/images/range-thumb-icon.svg) left center no-repeat;
   background-size: cover;
   cursor: grab;
 }
@@ -754,11 +754,11 @@ body {
 }
 
 .notification.notification_success .notification__content:after {
-  background: url(/images/icon-circle-check.svg) center no-repeat;
+  background: url(https://anatolysokolov.github.io/project-structure/images/icon-circle-check.svg) center no-repeat;
 }
 
 .notification.notification_error .notification__content:after {
-  background: url(/images/icon-error.svg) center no-repeat;
+  background: url(https://anatolysokolov.github.io/project-structure/images/icon-error.svg) center no-repeat;
 }
 
 .notification__content a {
@@ -818,7 +818,7 @@ body {
   border: 1px solid var(--grey-light);
   border-radius: 4px;
   outline: none;
-  background: var(--white) url(/images/calendar-icon.svg) 16px center no-repeat;
+  background: var(--white) url(https://anatolysokolov.github.io/project-structure/images/calendar-icon.svg) 16px center no-repeat;
   background-size: 18px 18px;
 }
 
@@ -909,7 +909,7 @@ body {
   justify-content: center;
   cursor: pointer;
   transition: 0.3s all;
-  background: url(/images/angle-arrow-icon.svg) left center no-repeat;
+  background: url(https://anatolysokolov.github.io/project-structure/images/angle-arrow-icon.svg) left center no-repeat;
   background-size: 9px 13px;
 }
 
@@ -1115,7 +1115,7 @@ body {
   left: 0;
   width: 100%;
   height: 113px;
-  background: url(/images/charts-skeleton.svg) center no-repeat;
+  background: url(https://anatolysokolov.github.io/project-structure/images/charts-skeleton.svg) center no-repeat;
   background-size: cover;
   display: block;
 }
@@ -1590,12 +1590,12 @@ button.is-loading::before {
 }
 
 .button-primary.is-loading::before {
-  background: url(/images/icon-loading-circle-white.svg) center no-repeat;
+  background: url(https://anatolysokolov.github.io/project-structure/images/icon-loading-circle-white.svg) center no-repeat;
   background-size: cover;
 }
 
 .button-primary-outline.is-loading::before {
-  background: url(/images/icon-loading-circle-blue.svg) center no-repeat;
+  background: url(https://anatolysokolov.github.io/project-structure/images/icon-loading-circle-blue.svg) center no-repeat;
   background-size: cover;
 }
 
