@@ -21,17 +21,19 @@ module.exports = {
     publicPath: '/',
     filename: '[name].bundle.js',
     path: path.join(__dirname, '../dist'),
-    chunkFilename: '[name]-[id].js'
+    chunkFilename: '[name].js'
   },
   module: {
     rules: [
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
+        exclude: /\/src\/assets\/fonts/i,
         use: imageLoaders
       },
       {
         // | svg - add in case when we need load svg font
-        test: /\.(woff|woff2|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
+        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        include: /\/src\/assets\/fonts/i,
         use: fontLoaders
       },
       {
@@ -40,8 +42,8 @@ module.exports = {
       },
       {
         test: /\.(js)?$/,
-        use: jsLoaders,
-        exclude: [/(node_modules)/]
+        exclude: [/(node_modules)/],
+        use: jsLoaders
       }
     ]
   },
@@ -63,10 +65,12 @@ module.exports = {
     }),
     new CopyWebpackPlugin([
       {
-        from: path.join(__dirname, '../src/assets')
+        from: path.join(__dirname, '../src/assets/favicon'),
+        to: 'favicon'
       },
       {
         from: path.join(__dirname, '../src/components/product-form/*.svg'),
+        to: 'images',
         flatten: true
       }
     ])
