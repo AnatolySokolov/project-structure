@@ -94,12 +94,12 @@ export default class ProductForm {
         <input type="hidden" name="url" value="${image.url}">
         <input type="hidden" name="source" value="${image.source}">
         <span>
-          <img src="/images/icon-grab.svg" data-grab-handle="" alt="grab">
+          <img src="https://anatolysokolov.github.io/project-structure/images/icon-grab.svg" data-grab-handle="" alt="grab">
           <img class="sortable-table__cell-img" alt="Image" src="${escapeHtml(image.url)}">
           <span>${escapeHtml(image.source)}</span>
         </span>
         <button type="button">
-          <img src="/images/icon-trash.svg" data-delete-handle="" alt="delete">
+          <img src="https://anatolysokolov.github.io/project-structure/images/icon-trash.svg" data-delete-handle="" alt="delete">
         </button>
       </li>
     `;
