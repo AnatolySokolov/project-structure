@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[3],{3:function(e,n,t){"use strict";t.r(n),n.default=class{constructor(){var e,n,t;t=void 0,(n="element")in(e=this)?Object.defineProperty(e,n,{value:t,enumerable:!0,configurable:!0,writable:!0}):e[n]=t}async render(){const e=document.createElement("div");return e.innerHTML='\n      <div class="error-404">\n        <h1 class="page-title">Page not found</h1>\n        <p>Sorry, the page doesn`t exist</p>\n      </div>\n    ',this.element=e.firstElementChild,this.element}}}}]);
+//# sourceMappingURL=error404-index-js.js.map
