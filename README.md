@@ -1,5 +1,7 @@
 # Admin Dashboard
 
+https://anatolysokolov.github.io
+
 Данный проект был разработан в рамках курса ["JavaScript/​DOM/​Интерфейсы" для программистов](https://learn.javascript.ru/courses/js)
 проекта [learn.javascript.ru](https://learn.javascript.ru/)
 
